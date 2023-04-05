@@ -70,6 +70,10 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
     //mint fee
     uint256 internal immutable i_mintFee;
 
+    //Events
+    event NftRequested(uint256 indexed requestId, address requester);
+    event NftMinted(Breed dogBreed, address minter);
+
     //constructor using VRF and ERC721 constructors
     constructor(
         address vrfCoordinatorV2,
@@ -103,6 +107,8 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         );
         // when requestNft is called, it will set the requestIdToSender of the requested random number to be the caller of the request
         s_requestIdToSender[requestId] = msg.sender;
+
+        emit NftRequested(requestId, msg.sender);
     }
 
     //withdrawing the nft for owner only through Ownable.sol onlyOwner function
@@ -139,6 +145,8 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         // set URI to a new tokenId based on the array we created of memory 3
         // using its index version in uint256 of dogBreed
         _setTokenURI(newTokenId, s_dogTokenUris[uint256(dogBreed)]);
+
+        emit NftMinted(dogBreed, dogOwner);
     }
 
     // attributes dogs to a percent
