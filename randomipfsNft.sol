@@ -101,8 +101,8 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         requestId = i_vrfCoordinator.requestRandomWords(
             i_gasLane,
             i_subscriptionId,
-            i_callbackGasLimit,
             REQUEST_CONFIRMATIONS,
+            i_callbackGasLimit,
             NUM_WORDS
         );
         // when requestNft is called, it will set the requestIdToSender of the requested random number to be the caller of the request
@@ -141,7 +141,9 @@ contract RandomIpfsNft is VRFConsumerBaseV2, ERC721URIStorage, Ownable {
         //then mint
 
         _safeMint(dogOwner, newTokenId);
-
+        //update token counter
+        s_tokenCounter = s_tokenCounter + 1;
+        //s_tokenCounter += s_tokenCounter;
         // set URI to a new tokenId based on the array we created of memory 3
         // using its index version in uint256 of dogBreed
         _setTokenURI(newTokenId, s_dogTokenUris[uint256(dogBreed)]);
